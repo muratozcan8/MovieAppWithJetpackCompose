@@ -92,6 +92,9 @@ dependencies {
     // coil
     implementation("io.coil-kt:coil:2.7.0")
 
+    // System UI Controller
+    implementation(libs.accompanist.systemuicontroller)
+
     // paging
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
     implementation("androidx.paging:paging-common-ktx:$paging_version")

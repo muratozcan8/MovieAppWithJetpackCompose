@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorScheme =
     darkColorScheme(
@@ -52,6 +53,7 @@ fun MovieAppTheme(
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
         }
     }
+    rememberSystemUiController().isStatusBarVisible = false
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
