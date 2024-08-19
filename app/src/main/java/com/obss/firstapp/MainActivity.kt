@@ -1,15 +1,15 @@
 package com.obss.firstapp
 
 import android.os.Bundle
+import android.widget.TextView
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class MainActivity : AppCompatActivity() {
-
-    private var threshold = 100
-
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -19,18 +19,12 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        printFibonacciNumbers(threshold)
-    }
-
-    private fun printFibonacciNumbers(threshold: Int) {
-        var prev = 0
-        var curr = 1
-        while (curr <= threshold) {
-            println(curr)
-            val next = prev + curr
-            prev = curr
-            curr = next
+        setContent {
+            AndroidView(factory = {
+                TextView(it).apply {
+                    text = "Hello, world!"
+                }
+            })
         }
     }
 }
