@@ -1,4 +1,4 @@
-package com.obss.firstapp
+package com.obss.firstapp.view
 
 import android.os.Bundle
 import android.widget.TextView
@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.obss.firstapp.R
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
