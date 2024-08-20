@@ -78,6 +78,7 @@ dependencies {
     // dagger/hilt
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // retrofit
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
@@ -91,6 +92,7 @@ dependencies {
 
     // coil
     implementation("io.coil-kt:coil:2.7.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     // System UI Controller
     implementation(libs.accompanist.systemuicontroller)
@@ -98,6 +100,7 @@ dependencies {
     // paging
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
     implementation("androidx.paging:paging-common-ktx:$paging_version")
+    implementation("androidx.paging:paging-compose:$paging_version")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
 }
