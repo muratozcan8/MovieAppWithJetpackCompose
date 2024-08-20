@@ -80,7 +80,6 @@ fun BottomNavigationView(navController: NavController) {
         factory = { context ->
             BottomNavigationView(context).apply {
                 inflateMenu(R.menu.bottom_menu)
-
                 setOnItemSelectedListener {
                     when (it.itemId) {
                         R.id.bottom_home -> {
@@ -127,7 +126,6 @@ fun HideSystemBars() {
     val window = (LocalView.current.context as? android.app.Activity)?.window
 
     DisposableEffect(Unit) {
-        // hide system bars
         val windowInsetsController = window?.let { WindowCompat.getInsetsController(it, context) }
         windowInsetsController?.let {
             it.hide(WindowInsetsCompat.Type.systemBars())
@@ -135,7 +133,6 @@ fun HideSystemBars() {
         }
 
         onDispose {
-            // show system bars again when composable leaves the composition
             windowInsetsController?.show(WindowInsetsCompat.Type.systemBars())
         }
     }

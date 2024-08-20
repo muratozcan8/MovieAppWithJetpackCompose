@@ -18,13 +18,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -44,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.obss.firstapp.R
@@ -59,6 +65,7 @@ fun HomeScreen(
     val popularMovies = homeViewModel.popularMovieList.collectAsLazyPagingItems()
     val topRatedMovies = homeViewModel.topRatedMovieList.collectAsLazyPagingItems()
     val nowPlayingMovies = homeViewModel.nowPlayingMovieList.collectAsLazyPagingItems()
+    var selectedOption by remember { mutableStateOf("Popular") }
     Box(
         modifier =
             Modifier
@@ -75,49 +82,66 @@ fun HomeScreen(
                 ),
     ) {
         Column {
-            Text(text = "Popular Movies", style = MaterialTheme.typography.headlineSmall)
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(8.dp),
-            ) {
-                items(popularMovies.itemCount) { movie ->
-                    popularMovies[movie]?.let { MovieGridItem(movie = it) }
+            SegmentedButton(
+                selectedOption = selectedOption,
+                onOptionSelected = { option -> selectedOption = option },
+            )
+            when (selectedOption) {
+                "Popular" -> {
+                    DisplayMovies(movies = popularMovies)
                 }
+                "Top Rated" -> {
+                    DisplayMovies(movies = topRatedMovies)
+                }
+                "Now Playing" -> {
+                    DisplayMovies(movies = nowPlayingMovies)
+                }
+            }
+        }
+    }
+}
 
-                when {
-                    popularMovies.loadState.refresh is LoadState.Loading -> {
-                        item {
-                            CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
-                        }
-                    }
+@Composable
+fun DisplayMovies(movies: LazyPagingItems<Movie>) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(8.dp),
+    ) {
+        items(movies.itemCount) { index ->
+            movies[index]?.let { movie ->
+                MovieGridItem(movie = movie)
+            }
+        }
 
-                    popularMovies.loadState.append is LoadState.Loading -> {
-                        item {
-                            CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
-                        }
-                    }
-
-                    popularMovies.loadState.refresh is LoadState.Error -> {
-                        val error = popularMovies.loadState.refresh as LoadState.Error
-                        item {
-                            Text(
-                                "Error: ${error.error.localizedMessage}",
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-                        }
-                    }
-
-                    popularMovies.loadState.append is LoadState.Error -> {
-                        val error = popularMovies.loadState.append as LoadState.Error
-                        item {
-                            Text(
-                                "Error: ${error.error.localizedMessage}",
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-                        }
-                    }
+        when {
+            movies.loadState.refresh is LoadState.Loading -> {
+                item {
+                    CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
+                }
+            }
+            movies.loadState.append is LoadState.Loading -> {
+                item {
+                    CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
+                }
+            }
+            movies.loadState.refresh is LoadState.Error -> {
+                val error = movies.loadState.refresh as LoadState.Error
+                item {
+                    Text(
+                        "Error: ${error.error.localizedMessage}",
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            }
+            movies.loadState.append is LoadState.Error -> {
+                val error = movies.loadState.append as LoadState.Error
+                item {
+                    Text(
+                        "Error: ${error.error.localizedMessage}",
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                 }
             }
         }
@@ -200,6 +224,42 @@ fun MovieGridItem(movie: Movie) {
                     contentDescription = "Favorite Icon",
                     tint = Color.White,
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun SegmentedButton(
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit,
+) {
+    val options = listOf("Popular", "Top Rated", "Now Playing")
+
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, bottom = 4.dp)
+                .padding(horizontal = 6.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+    ) {
+        options.forEach { option ->
+            val isSelected = option == selectedOption
+            Button(
+                onClick = { onOptionSelected(option) },
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = if (isSelected) Color.Red else Color.Gray,
+                        contentColor = Color.White,
+                    ),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(4.dp),
+                shape = RoundedCornerShape(50),
+            ) {
+                Text(text = option, fontSize = 14.sp, overflow = TextOverflow.Ellipsis, maxLines = 1)
             }
         }
     }

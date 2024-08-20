@@ -22,7 +22,7 @@
     <dimen name="movie_grid_item_height">180dp</dimen>
     <dimen name="movie_grid_item_text_size">14sp</dimen>
     <dimen name="movie_grid_item_margin_bottom">6dp</dimen>
-    <dimen name="movie_grid_item_stroke_width">1dp</dimen>
+    <dimen name="movie_grid_item_stroke_width">2dp</dimen>
     <dimen name="movie_grid_item_icon_margin_bottom">6dp</dimen>
     <dimen name="movie_grid_item_text_margin_horizontal">5dp</dimen>
 
