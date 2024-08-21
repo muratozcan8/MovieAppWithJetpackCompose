@@ -136,13 +136,14 @@ fun SearchBar(
                     keyboardAction?.hide()
                 },
             ),
+        shape = RoundedCornerShape(12.dp),
         colors =
             TextFieldDefaults.textFieldColors(
                 focusedTextColor = Color.White,
                 disabledTextColor = Color.White,
                 unfocusedTextColor = Color.White,
                 errorTextColor = Color.White,
-                containerColor = Color.Gray.copy(alpha = 0.1f),
+                containerColor = Color.Gray.copy(alpha = 0.5f),
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,

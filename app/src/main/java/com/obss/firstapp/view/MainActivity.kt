@@ -1,18 +1,19 @@
 package com.obss.firstapp.view
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.ViewCompat
@@ -20,6 +21,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -55,9 +57,18 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
+    val bottomNavItems = listOf("home", "favorite", "search")
     Scaffold(
         bottomBar = {
-            BottomNavigationView(navController = navController)
+            val currentRoute =
+                navController
+                    .currentBackStackEntryAsState()
+                    .value
+                    ?.destination
+                    ?.route
+            if (currentRoute in bottomNavItems) {
+                BottomNavigationView(navController = navController)
+            }
         },
     ) { innerPadding ->
         Box(
@@ -73,11 +84,15 @@ fun MainScreen() {
 
 @Composable
 fun BottomNavigationView(navController: NavController) {
-    val configuration = LocalConfiguration.current
     AndroidView(
+        modifier = Modifier.fillMaxWidth(),
         factory = { context ->
             BottomNavigationView(context).apply {
                 inflateMenu(R.menu.bottom_menu)
+                setBackgroundColor(resources.getColor(R.color.gray_background, null))
+                itemIconTintList = ColorStateList.valueOf(resources.getColor(R.color.white, null))
+                itemTextColor = ColorStateList.valueOf(resources.getColor(R.color.white, null))
+                itemActiveIndicatorColor = ColorStateList.valueOf(resources.getColor(R.color.red_bottom, null))
                 setOnItemSelectedListener {
                     when (it.itemId) {
                         R.id.bottom_home -> {

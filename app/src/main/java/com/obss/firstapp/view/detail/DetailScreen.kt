@@ -106,11 +106,11 @@ fun DetailScreen(
                             .fillMaxWidth()
                             .aspectRatio(1.77f),
                 ) {
-                    HorizontalPager(
-                        count = 5,
-                        modifier = Modifier.fillMaxSize(),
-                    ) { page ->
-                        if (movieImages.isNotEmpty()) {
+                    if (movieImages.isNotEmpty()) {
+                        HorizontalPager(
+                            count = movieImages.size,
+                            modifier = Modifier.fillMaxSize(),
+                        ) { page ->
                             AsyncImage(
                                 model = "${IMAGE_BASE_URL}${movieImages[page].filePath}",
                                 contentDescription = null,
