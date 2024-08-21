@@ -16,6 +16,9 @@ class SearchViewModel
     constructor(
         private val movieRepository: MovieRepository,
     ) : ViewModel() {
+        private val _searchQuery = MutableStateFlow("")
+        val searchQuery: StateFlow<String> = _searchQuery
+
         private val _searchMovieList = MutableStateFlow<List<MovieSearch>>(emptyList())
         val searchMovieList: StateFlow<List<MovieSearch>> = _searchMovieList
 
@@ -29,5 +32,9 @@ class SearchViewModel
             viewModelScope.launch {
                 movieRepository.searchMovies(query, _searchMovieList, _loadingStateFlow, _errorMessage)
             }
+        }
+
+        fun updateQuery(newQuery: String) {
+            _searchQuery.value = newQuery
         }
     }
