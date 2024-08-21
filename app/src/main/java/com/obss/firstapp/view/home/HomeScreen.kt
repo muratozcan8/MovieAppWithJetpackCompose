@@ -3,6 +3,7 @@ package com.obss.firstapp.view.home
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -88,13 +89,13 @@ fun HomeScreen(
             )
             when (selectedOption) {
                 "Popular" -> {
-                    DisplayMovies(movies = popularMovies)
+                    DisplayMovies(movies = popularMovies, navController = navController)
                 }
                 "Top Rated" -> {
-                    DisplayMovies(movies = topRatedMovies)
+                    DisplayMovies(movies = topRatedMovies, navController = navController)
                 }
                 "Now Playing" -> {
-                    DisplayMovies(movies = nowPlayingMovies)
+                    DisplayMovies(movies = nowPlayingMovies, navController = navController)
                 }
             }
         }
@@ -102,7 +103,10 @@ fun HomeScreen(
 }
 
 @Composable
-fun DisplayMovies(movies: LazyPagingItems<Movie>) {
+fun DisplayMovies(
+    movies: LazyPagingItems<Movie>,
+    navController: NavController,
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -111,7 +115,7 @@ fun DisplayMovies(movies: LazyPagingItems<Movie>) {
     ) {
         items(movies.itemCount) { index ->
             movies[index]?.let { movie ->
-                MovieGridItem(movie = movie)
+                MovieGridItem(movie = movie, navController = navController)
             }
         }
 
@@ -149,7 +153,10 @@ fun DisplayMovies(movies: LazyPagingItems<Movie>) {
 }
 
 @Composable
-fun MovieGridItem(movie: Movie) {
+fun MovieGridItem(
+    movie: Movie,
+    navController: NavController,
+) {
     val backgroundColor = colorResource(id = R.color.gray_background)
     val cornerRadius = 10.dp
     val strokeWidth = dimensionResource(id = R.dimen.movie_grid_item_stroke_width)
@@ -167,7 +174,9 @@ fun MovieGridItem(movie: Movie) {
                 .padding(
                     horizontal = 3.dp,
                     vertical = dimensionResource(id = R.dimen.movie_grid_item_margin_bottom),
-                ),
+                ).clickable {
+                    navController.navigate("detail/${movie.id}")
+                },
         elevation = CardDefaults.cardElevation(defaultElevation = cardElevation),
         shape = RoundedCornerShape(cornerRadius),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
