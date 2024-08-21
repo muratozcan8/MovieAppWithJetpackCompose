@@ -61,7 +61,6 @@ import com.obss.firstapp.R
 import com.obss.firstapp.data.model.movieSearch.MovieSearch
 import com.obss.firstapp.utils.Constants.IMAGE_BASE_URL
 import com.obss.firstapp.utils.ext.roundToSingleDecimal
-import kotlinx.coroutines.Job
 
 @Composable
 fun SearchScreen(
@@ -72,7 +71,6 @@ fun SearchScreen(
     val searchList = viewModel.searchMovieList.collectAsState()
     val loadingState = viewModel.loadingStateFlow.collectAsState()
     val errorMessage = viewModel.errorMessage.collectAsState()
-    var searchJob: Job? = null
 
     Box(
         modifier =
