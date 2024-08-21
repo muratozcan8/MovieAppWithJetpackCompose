@@ -109,8 +109,8 @@ fun DisplayMovies(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(120.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
         contentPadding = PaddingValues(8.dp),
     ) {
         items(movies.itemCount) { index ->

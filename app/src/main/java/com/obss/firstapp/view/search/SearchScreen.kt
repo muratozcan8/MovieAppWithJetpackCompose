@@ -93,7 +93,7 @@ fun SearchScreen(
                 onQueryChanged = { viewModel.updateQuery(it) },
                 onSearch = { viewModel.searchMovies(query) },
             )
-            DisplayMovies(movies = searchList, isLoading = loadingState.value, errorMessage = errorMessage.value)
+            DisplayMovies(movies = searchList, isLoading = loadingState.value, errorMessage = errorMessage.value, navController)
         }
     }
 }
@@ -156,15 +156,16 @@ fun DisplayMovies(
     movies: State<List<MovieSearch>>,
     isLoading: Boolean = false,
     errorMessage: String = "",
+    navController: NavController,
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        columns = GridCells.Adaptive(120.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
         contentPadding = PaddingValues(8.dp),
     ) {
         itemsIndexed(movies.value) { _, movie ->
-            MovieGridItem(movie = movie)
+            MovieGridItem(movie = movie, navController = navController)
         }
 
         when {
@@ -186,7 +187,10 @@ fun DisplayMovies(
 }
 
 @Composable
-fun MovieGridItem(movie: MovieSearch) {
+fun MovieGridItem(
+    movie: MovieSearch,
+    navController: NavController,
+) {
     val backgroundColor = colorResource(id = R.color.gray_background)
     val cornerRadius = 10.dp
     val strokeWidth = dimensionResource(id = R.dimen.movie_grid_item_stroke_width)
