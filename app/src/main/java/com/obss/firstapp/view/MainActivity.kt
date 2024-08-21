@@ -1,6 +1,5 @@
 package com.obss.firstapp.view
 
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -20,7 +19,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.forEach
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -99,23 +97,7 @@ fun BottomNavigationView(navController: NavController) {
                         }
                     }
                 }
-
-                if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    layoutParams.height = resources.getDimension(R.dimen.bottom_menu_height_landscape).toInt()
-                    menu.forEach { it.title = EMPTY }
-                }
             }
-        },
-        update = { view ->
-            val layoutParams = view.layoutParams
-
-            if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                layoutParams.height = view.resources.getDimension(R.dimen.bottom_menu_height_landscape).toInt()
-                view.menu.forEach { it.title = EMPTY }
-            } else {
-                layoutParams.height = view.resources.getDimension(R.dimen.bottom_menu_height).toInt()
-            }
-            view.layoutParams = layoutParams
         },
     )
 }
