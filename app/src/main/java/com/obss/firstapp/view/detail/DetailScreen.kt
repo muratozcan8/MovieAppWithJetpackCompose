@@ -357,7 +357,7 @@ fun DetailScreen(
 
                 if (reviews.isNotEmpty()) {
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { navController.navigate("review/$movieId/${movie?.title}") },
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                     ) {
