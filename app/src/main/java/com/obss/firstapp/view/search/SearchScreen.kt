@@ -3,6 +3,7 @@ package com.obss.firstapp.view.search
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -205,6 +206,7 @@ fun MovieGridItem(
             Modifier
                 .width(dimensionResource(id = R.dimen.movie_grid_item_width))
                 .height(dimensionResource(id = R.dimen.movie_grid_item_height) + 100.dp)
+                .clickable { navController.navigate("detail/${movie.id}") }
                 .padding(
                     horizontal = 3.dp,
                     vertical = dimensionResource(id = R.dimen.movie_grid_item_margin_bottom),
