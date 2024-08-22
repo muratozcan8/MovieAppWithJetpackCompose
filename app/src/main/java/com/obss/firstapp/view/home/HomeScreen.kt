@@ -27,6 +27,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,6 +67,13 @@ fun HomeScreen(
     val popularMovies = homeViewModel.popularMovieList.collectAsLazyPagingItems()
     val topRatedMovies = homeViewModel.topRatedMovieList.collectAsLazyPagingItems()
     val nowPlayingMovies = homeViewModel.nowPlayingMovieList.collectAsLazyPagingItems()
+
+    LaunchedEffect(Unit) {
+        popularMovies.refresh()
+        topRatedMovies.refresh()
+        nowPlayingMovies.refresh()
+    }
+
     var selectedOption by remember { mutableStateOf("Popular") }
     Box(
         modifier =
@@ -85,7 +93,9 @@ fun HomeScreen(
         Column {
             SegmentedButton(
                 selectedOption = selectedOption,
-                onOptionSelected = { option -> selectedOption = option },
+                onOptionSelected = { option ->
+                    selectedOption = option
+                },
             )
             when (selectedOption) {
                 "Popular" -> {
