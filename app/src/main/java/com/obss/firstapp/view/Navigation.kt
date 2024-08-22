@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import com.obss.firstapp.view.detail.DetailScreen
 import com.obss.firstapp.view.favorite.FavoriteScreen
 import com.obss.firstapp.view.home.HomeScreen
+import com.obss.firstapp.view.review.ReviewScreen
 import com.obss.firstapp.view.search.SearchScreen
 
 @Composable
@@ -27,6 +28,23 @@ fun Navigation(navController: NavHostController) {
             val movieId = backStackEntry.arguments?.getInt("movieId")
             if (movieId != null) {
                 DetailScreen(navController, movieId)
+            }
+        }
+        composable(
+            "review/{movieId}/{movieTitle}",
+            arguments =
+                listOf(
+                    navArgument("movieId") { type = NavType.IntType },
+                    navArgument("movieTitle") {
+                        type =
+                            NavType.StringType
+                    },
+                ),
+        ) {
+            val movieId = it.arguments?.getInt("movieId")
+            val movieTitle = it.arguments?.getString("movieTitle")
+            if (movieId != null && movieTitle != null) {
+                ReviewScreen(navController, movieId, movieTitle)
             }
         }
     }
