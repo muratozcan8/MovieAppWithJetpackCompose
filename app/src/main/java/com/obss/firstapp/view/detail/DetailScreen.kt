@@ -1,6 +1,9 @@
 package com.obss.firstapp.view.detail
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -56,6 +59,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -66,6 +70,8 @@ import com.obss.firstapp.data.local.FavoriteMovie
 import com.obss.firstapp.data.model.movie.Movie
 import com.obss.firstapp.data.model.movieDetail.MovieDetail
 import com.obss.firstapp.utils.Constants.IMAGE_BASE_URL
+import com.obss.firstapp.utils.Constants.YOUTUBE_APP
+import com.obss.firstapp.utils.Constants.YOUTUBE_BASE_URL
 import com.obss.firstapp.utils.ext.roundToSingleDecimal
 import kotlinx.coroutines.launch
 
@@ -83,6 +89,7 @@ fun DetailScreen(
     detailViewModel.getRecommendationMovies(movieId)
     detailViewModel.getReviews(movieId)
     detailViewModel.getFavoriteMovie(movieId)
+    detailViewModel.getVideos(movieId)
 
     val movie = detailViewModel.movie.collectAsState().value
     val movieImages = detailViewModel.movieImages.collectAsState().value
@@ -168,6 +175,36 @@ fun DetailScreen(
                         }
 
                         Spacer(modifier = Modifier.weight(1f))
+                        if (videos.isNotEmpty()) {
+                            for (video in videos) {
+                                if (video.site == "YouTube" && video.type == "Trailer" && video.official == true) {
+                                    IconButton(onClick = {
+                                        val intentApp = Intent(Intent.ACTION_VIEW, Uri.parse("$YOUTUBE_APP${video.key}"))
+                                        val intentBrowser = Intent(Intent.ACTION_VIEW, Uri.parse("$YOUTUBE_BASE_URL${video.key}"))
+                                        try {
+                                            context.startActivity(intentApp)
+                                        } catch (e: ActivityNotFoundException) {
+                                            context.startActivity(intentBrowser)
+                                        }
+                                    }) {
+                                        Icon(
+                                            painter =
+                                                painterResource(
+                                                    id = R.drawable.play_circle_outline_24,
+                                                ),
+                                            contentDescription = null,
+                                            tint = Color.White,
+                                            modifier =
+                                                Modifier
+                                                    .size(dimensionResource(id = R.dimen.top_bar_icon_size))
+                                                    .background(color = Color.Gray, shape = CircleShape)
+                                                    .padding(8.dp),
+                                        )
+                                    }
+                                    break
+                                }
+                            }
+                        }
                         if (movie != null) {
                             val isFavorite = remember { mutableStateOf(movie.isFavorite ?: false) }
 
