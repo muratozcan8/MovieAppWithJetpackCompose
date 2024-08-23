@@ -616,7 +616,7 @@ fun ActorDetailBottomSheet(
             }
         }
 
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(16.dp).verticalScroll(rememberScrollState())) {
             Text(
                 text = "Biography",
                 style = TextStyle(color = Color.Black, fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.ubuntu_bold))),
@@ -626,19 +626,18 @@ fun ActorDetailBottomSheet(
                 text = actor.biography.toString(),
                 style = TextStyle(color = Color.Black, fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.ubuntu_light))),
             )
-        }
-
-        Button(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            onClick = {
-                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                    if (!sheetState.isVisible) {
-                        showBottomSheet.value = false
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp),
+                onClick = {
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            showBottomSheet.value = false
+                        }
                     }
-                }
-            },
-        ) {
-            Text("Close")
+                },
+            ) {
+                Text("Close")
+            }
         }
     }
 }
