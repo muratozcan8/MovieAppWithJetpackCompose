@@ -81,6 +81,7 @@ import com.obss.firstapp.data.model.movieDetail.MovieDetail
 import com.obss.firstapp.utils.Constants.IMAGE_BASE_URL
 import com.obss.firstapp.utils.Constants.YOUTUBE_APP
 import com.obss.firstapp.utils.Constants.YOUTUBE_BASE_URL
+import com.obss.firstapp.utils.ext.formatAndCalculateAge
 import com.obss.firstapp.utils.ext.roundToSingleDecimal
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -474,6 +475,7 @@ fun DetailScreen(
                             scope = scope,
                             sheetState = sheetState,
                             actor = actor,
+                            context = context,
                         )
                     }
                 }
@@ -514,6 +516,7 @@ fun ActorDetailBottomSheet(
     scope: CoroutineScope,
     sheetState: SheetState,
     actor: Actor,
+    context: Context,
 ) {
     ModalBottomSheet(
         onDismissRequest = {
@@ -521,14 +524,121 @@ fun ActorDetailBottomSheet(
         },
         sheetState = sheetState,
     ) {
-        Button(onClick = {
-            scope.launch { sheetState.hide() }.invokeOnCompletion {
-                if (!sheetState.isVisible) {
-                    showBottomSheet.value = false
+        Row(modifier = Modifier.padding(12.dp)) {
+            AsyncImage(
+                model = "${IMAGE_BASE_URL}${actor.profilePath}",
+                contentDescription = null,
+                modifier =
+                    Modifier
+                        .clip(CircleShape)
+                        .size(120.dp),
+                contentScale = ContentScale.Crop,
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier =
+                        Modifier
+                            .background(color = Color.Transparent)
+                            .padding(4.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.date_24),
+                        contentDescription = null,
+                        tint = Color(0xFF000000),
+                        modifier = Modifier.size(24.dp),
+                    )
+
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    actor.birthday?.let {
+                        Text(
+                            modifier = Modifier.padding(start = 4.dp),
+                            text = it.formatAndCalculateAge(),
+                            style =
+                                TextStyle(
+                                    color = Color.Black,
+                                    fontSize = dimensionResource(id = R.dimen.movie_info_text_size).value.sp,
+                                    fontFamily = FontFamily(Font(R.font.ubuntu_medium)),
+                                ),
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier =
+                        Modifier
+                            .background(color = Color.Transparent)
+                            .padding(4.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.home_24),
+                        contentDescription = null,
+                        tint = Color(0xFF000000),
+                        modifier = Modifier.size(24.dp),
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    actor.placeOfBirth?.let {
+                        Text(
+                            modifier = Modifier.padding(start = 4.dp),
+                            text = it,
+                            style =
+                                TextStyle(
+                                    color = Color.Black,
+                                    fontSize = dimensionResource(id = R.dimen.movie_info_text_size).value.sp,
+                                    fontFamily = FontFamily(Font(R.font.ubuntu_medium)),
+                                ),
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                if (actor.homepage != null) {
+                    IconButton(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(actor.homepage.toString()))
+                            context.startActivity(intent)
+                        },
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.webpage_24),
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier =
+                                Modifier
+                                    .size(dimensionResource(id = R.dimen.top_bar_icon_size))
+                                    .background(color = Color.Gray, shape = CircleShape)
+                                    .padding(8.dp),
+                        )
+                    }
                 }
             }
-        }) {
-            Text("Hide bottom sheet: ${actor.name}")
+        }
+
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Biography",
+                style = TextStyle(color = Color.Black, fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.ubuntu_bold))),
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = actor.biography.toString(),
+                style = TextStyle(color = Color.Black, fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.ubuntu_light))),
+            )
+        }
+
+        Button(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            onClick = {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        showBottomSheet.value = false
+                    }
+                }
+            },
+        ) {
+            Text("Close")
         }
     }
 }
