@@ -25,6 +25,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -32,16 +33,20 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -62,6 +67,7 @@ import com.obss.firstapp.R
 import com.obss.firstapp.data.model.movieSearch.MovieSearch
 import com.obss.firstapp.utils.Constants.IMAGE_BASE_URL
 import com.obss.firstapp.utils.ext.roundToSingleDecimal
+import com.obss.firstapp.view.detail.AlertDialogExample
 
 @Composable
 fun SearchScreen(
@@ -71,7 +77,9 @@ fun SearchScreen(
     val query = viewModel.searchQuery.collectAsState().value
     val searchList = viewModel.searchMovieList.collectAsState()
     val loadingState = viewModel.loadingStateFlow.collectAsState()
-    val errorMessage = viewModel.errorMessage.collectAsState()
+    val errorMessage = viewModel.errorMessage.collectAsState().value
+
+    val isDialogVisible = remember { mutableStateOf(true) }
 
     Box(
         modifier =
@@ -94,8 +102,17 @@ fun SearchScreen(
                 onQueryChanged = { viewModel.updateQuery(it) },
                 onSearch = { viewModel.searchMovies(query) },
             )
-            DisplayMovies(movies = searchList, isLoading = loadingState.value, errorMessage = errorMessage.value, navController)
+            DisplayMovies(movies = searchList, isLoading = loadingState.value, navController)
         }
+    }
+    if (errorMessage.isNotEmpty() && isDialogVisible.value) {
+        AlertDialogExample(
+            onDismissRequest = { },
+            onClose = { isDialogVisible.value = false },
+            dialogTitle = "Error",
+            dialogText = errorMessage,
+            icon = painterResource(id = R.drawable.error_24),
+        )
     }
 }
 
@@ -156,7 +173,6 @@ fun SearchBar(
 fun DisplayMovies(
     movies: State<List<MovieSearch>>,
     isLoading: Boolean = false,
-    errorMessage: String = "",
     navController: NavController,
 ) {
     LazyVerticalGrid(
@@ -173,14 +189,6 @@ fun DisplayMovies(
             isLoading -> {
                 item {
                     CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
-                }
-            }
-            errorMessage.isNotEmpty() -> {
-                item {
-                    Text(
-                        "Error: $errorMessage",
-                        modifier = Modifier.fillMaxWidth(),
-                    )
                 }
             }
         }
@@ -270,4 +278,48 @@ fun MovieGridItem(
             }
         }
     }
+}
+
+@Composable
+fun AlertDialogError(
+    onDismissRequest: () -> Unit,
+    onClose: () -> Unit,
+    dialogTitle: String,
+    dialogText: String,
+    icon: Painter,
+) {
+    AlertDialog(
+        icon = {
+            Icon(icon, contentDescription = "Example Icon")
+        },
+        title = {
+            Text(
+                text = dialogTitle,
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontFamily = FontFamily(Font(R.font.ubuntu_bold)),
+            )
+        },
+        text = {
+            Text(
+                text = dialogText,
+                color = Color.Black,
+                fontSize = 16.sp,
+                fontFamily = FontFamily(Font(R.font.ubuntu_light)),
+                textAlign = TextAlign.Center,
+            )
+        },
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onClose()
+                },
+            ) {
+                Text("Close")
+            }
+        },
+    )
 }
