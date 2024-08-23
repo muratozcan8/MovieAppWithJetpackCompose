@@ -1,5 +1,9 @@
 package com.obss.firstapp.utils.ext
 
+import android.text.Spanned
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.core.text.HtmlCompat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -35,4 +39,12 @@ fun String.formatAndCalculateAge(): String {
         age--
     }
     return "$formattedDate ($age)"
+}
+
+fun String.toAnnotatedString(): AnnotatedString {
+    val spanned: Spanned = HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+    return buildAnnotatedString {
+        append(spanned.toString())
+    }
 }

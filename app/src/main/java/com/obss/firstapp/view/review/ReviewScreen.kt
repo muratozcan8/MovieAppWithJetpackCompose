@@ -49,6 +49,7 @@ import com.obss.firstapp.R
 import com.obss.firstapp.data.model.review.ReviewResult
 import com.obss.firstapp.utils.Constants.IMAGE_BASE_URL
 import com.obss.firstapp.utils.ext.formatToReadableDate
+import com.obss.firstapp.utils.ext.toAnnotatedString
 
 @Composable
 fun ReviewScreen(
@@ -172,7 +173,7 @@ fun ReviewCard(review: ReviewResult) {
             }
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = review.content,
+                text = review.content.toAnnotatedString(),
                 color = Color.White,
                 maxLines = maxLines,
                 fontSize = dimensionResource(id = R.dimen.review_text_size).value.sp,
