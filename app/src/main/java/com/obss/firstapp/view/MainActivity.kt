@@ -135,7 +135,6 @@ fun HideSystemBars() {
     }
 }
 
-private const val EMPTY = ""
 private const val HOME = "home"
 private const val SEARCH = "search"
 private const val FAVORITE = "favorite"

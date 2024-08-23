@@ -192,6 +192,10 @@ class MovieRepository
             errorMessage.value = ""
             try {
                 val response = movieApiService.getMovieRecommendations(movieId)
+                response.results.forEach {
+                    val isFavorite = getMovieById(it.id!!) != null
+                    it.isFavorite = isFavorite
+                }
                 recommendationsMovies.value = response.results
             } catch (exception: Exception) {
                 catchException(exception, errorMessage)

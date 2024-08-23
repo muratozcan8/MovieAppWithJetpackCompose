@@ -69,7 +69,7 @@ fun HomeScreen(
     val nowPlayingMovies = homeViewModel.nowPlayingMovieList.collectAsLazyPagingItems()
     val errorMessage = homeViewModel.errorMessage.collectAsState().value
 
-    var selectedOption by remember { mutableStateOf("Popular") }
+    var selectedOption by remember { mutableStateOf(POPULAR) }
     Box(
         modifier =
             Modifier
@@ -93,15 +93,15 @@ fun HomeScreen(
                 },
             )
             when (selectedOption) {
-                "Popular" -> {
+                POPULAR -> {
                     popularMovies.refresh()
                     DisplayMovies(movies = popularMovies, navController = navController, errorMessage = errorMessage)
                 }
-                "Top Rated" -> {
+                TOP_RATED -> {
                     topRatedMovies.refresh()
                     DisplayMovies(movies = topRatedMovies, navController = navController, errorMessage = errorMessage)
                 }
-                "Now Playing" -> {
+                NOW_PLAYING -> {
                     nowPlayingMovies.refresh()
                     DisplayMovies(movies = nowPlayingMovies, navController = navController, errorMessage = errorMessage)
                 }
@@ -272,3 +272,7 @@ fun SegmentedButton(
         }
     }
 }
+
+private const val POPULAR = "Popular"
+private const val TOP_RATED = "Top Rated"
+private const val NOW_PLAYING = "Now Playing"
