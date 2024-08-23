@@ -133,7 +133,7 @@ fun MovieGridItem(
                     horizontal = 3.dp,
                     vertical = dimensionResource(id = R.dimen.movie_grid_item_margin_bottom),
                 ).clickable {
-                    navController.navigate("detail/${movie.id}")
+                    navController.navigate("detail/${movie.movieId}")
                 },
         elevation = CardDefaults.cardElevation(defaultElevation = cardElevation),
         shape = RoundedCornerShape(cornerRadius),
