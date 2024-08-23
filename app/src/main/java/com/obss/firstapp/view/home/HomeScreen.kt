@@ -98,7 +98,7 @@ fun HomeScreen(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(top = 6.dp, start = 4.dp, end = 4.dp)
+                        .padding(top = 6.dp, start = 4.dp, end = 8.dp)
                         .height(dimensionResource(id = R.dimen.top_bar_height)),
             ) {
                 Image(
@@ -128,7 +128,8 @@ fun HomeScreen(
                         Modifier
                             .size(dimensionResource(id = R.dimen.layout_button_size))
                             .align(Alignment.CenterEnd)
-                            .background(color = colorResource(id = R.color.gray), shape = CircleShape),
+                            .background(color = colorResource(id = R.color.gray), shape = CircleShape)
+                            .padding(8.dp),
                 ) {
                     Icon(
                         painter =
@@ -354,7 +355,7 @@ fun MovieLinearItem(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(dimensionResource(id = R.dimen.movie_linear_item_height))
+                .height(dimensionResource(id = R.dimen.movie_linear_item_height) + 20.dp)
                 .padding(
                     horizontal = 3.dp,
                     vertical = dimensionResource(id = R.dimen.movie_grid_item_margin_bottom),
@@ -376,7 +377,7 @@ fun MovieLinearItem(
                 modifier =
                     Modifier
                         .width(dimensionResource(id = R.dimen.movie_linear_item_width))
-                        .height(dimensionResource(id = R.dimen.movie_linear_item_height))
+                        .fillMaxHeight()
                         .clip(RoundedCornerShape(10.dp)),
                 contentScale = ContentScale.Crop,
             )
