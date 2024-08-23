@@ -32,13 +32,21 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -67,14 +75,17 @@ import coil.compose.AsyncImage
 import com.google.accompanist.pager.HorizontalPager
 import com.obss.firstapp.R
 import com.obss.firstapp.data.local.FavoriteMovie
+import com.obss.firstapp.data.model.actor.Actor
 import com.obss.firstapp.data.model.movie.Movie
 import com.obss.firstapp.data.model.movieDetail.MovieDetail
 import com.obss.firstapp.utils.Constants.IMAGE_BASE_URL
 import com.obss.firstapp.utils.Constants.YOUTUBE_APP
 import com.obss.firstapp.utils.Constants.YOUTUBE_BASE_URL
 import com.obss.firstapp.utils.ext.roundToSingleDecimal
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     navController: NavController,
@@ -96,9 +107,15 @@ fun DetailScreen(
     val movieCasts = detailViewModel.movieCasts.collectAsState().value
     val recommendationMovies = detailViewModel.recommendationMovies.collectAsState().value
     val reviews = detailViewModel.reviews.collectAsState().value
+    val actor = detailViewModel.actor.collectAsState().value
     val isLoadings = detailViewModel.isLoadings.collectAsState().value
     val videos = detailViewModel.videos.collectAsState().value
     val errorMessage = detailViewModel.errorMessage.collectAsState().value
+
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var showBottomSheet = remember { mutableStateOf(false) }
+    var actorId = remember { mutableIntStateOf(0) }
 
     Box(
         modifier =
@@ -440,9 +457,24 @@ fun DetailScreen(
                                     Modifier
                                         .size(84.dp)
                                         .padding(horizontal = 8.dp)
-                                        .clip(CircleShape),
+                                        .clip(CircleShape)
+                                        .clickable {
+                                            detailViewModel.getActorDetails(actor.id!!)
+                                            showBottomSheet.value = true
+                                            actorId.intValue = actor.id
+                                        },
                             )
                         }
+                    }
+                }
+                if (showBottomSheet.value) {
+                    if (actor != null) {
+                        ActorDetailBottomSheet(
+                            showBottomSheet = showBottomSheet,
+                            scope = scope,
+                            sheetState = sheetState,
+                            actor = actor,
+                        )
                     }
                 }
 
@@ -471,6 +503,32 @@ fun DetailScreen(
                     }
                 }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ActorDetailBottomSheet(
+    showBottomSheet: MutableState<Boolean>,
+    scope: CoroutineScope,
+    sheetState: SheetState,
+    actor: Actor,
+) {
+    ModalBottomSheet(
+        onDismissRequest = {
+            showBottomSheet.value = false
+        },
+        sheetState = sheetState,
+    ) {
+        Button(onClick = {
+            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                if (!sheetState.isVisible) {
+                    showBottomSheet.value = false
+                }
+            }
+        }) {
+            Text("Hide bottom sheet: ${actor.name}")
         }
     }
 }
