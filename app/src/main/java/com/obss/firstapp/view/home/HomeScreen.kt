@@ -27,6 +27,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,6 +67,7 @@ fun HomeScreen(
     val popularMovies = homeViewModel.popularMovieList.collectAsLazyPagingItems()
     val topRatedMovies = homeViewModel.topRatedMovieList.collectAsLazyPagingItems()
     val nowPlayingMovies = homeViewModel.nowPlayingMovieList.collectAsLazyPagingItems()
+    val errorMessage = homeViewModel.errorMessage.collectAsState().value
 
     var selectedOption by remember { mutableStateOf("Popular") }
     Box(
@@ -93,15 +95,15 @@ fun HomeScreen(
             when (selectedOption) {
                 "Popular" -> {
                     popularMovies.refresh()
-                    DisplayMovies(movies = popularMovies, navController = navController)
+                    DisplayMovies(movies = popularMovies, navController = navController, errorMessage = errorMessage)
                 }
                 "Top Rated" -> {
                     topRatedMovies.refresh()
-                    DisplayMovies(movies = topRatedMovies, navController = navController)
+                    DisplayMovies(movies = topRatedMovies, navController = navController, errorMessage = errorMessage)
                 }
                 "Now Playing" -> {
                     nowPlayingMovies.refresh()
-                    DisplayMovies(movies = nowPlayingMovies, navController = navController)
+                    DisplayMovies(movies = nowPlayingMovies, navController = navController, errorMessage = errorMessage)
                 }
             }
         }
@@ -112,6 +114,7 @@ fun HomeScreen(
 fun DisplayMovies(
     movies: LazyPagingItems<Movie>,
     navController: NavController,
+    errorMessage: String = "",
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(120.dp),
@@ -136,20 +139,10 @@ fun DisplayMovies(
                     CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
                 }
             }
-            movies.loadState.refresh is LoadState.Error -> {
-                val error = movies.loadState.refresh as LoadState.Error
+            errorMessage.isNotEmpty() -> {
                 item {
                     Text(
-                        "Error: ${error.error.localizedMessage}",
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
-            }
-            movies.loadState.append is LoadState.Error -> {
-                val error = movies.loadState.append as LoadState.Error
-                item {
-                    Text(
-                        "Error: ${error.error.localizedMessage}",
+                        "Error: $errorMessage",
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }

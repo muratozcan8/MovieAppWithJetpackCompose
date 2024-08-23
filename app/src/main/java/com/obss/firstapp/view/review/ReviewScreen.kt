@@ -60,6 +60,7 @@ fun ReviewScreen(
 ) {
     reviewViewModel.getReviews(movieId)
     val reviews = reviewViewModel.reviewList.collectAsState()
+    val errorMessage = reviewViewModel.errorMessage.collectAsState()
 
     val avgRating =
         if (reviews.value.isNotEmpty()) {

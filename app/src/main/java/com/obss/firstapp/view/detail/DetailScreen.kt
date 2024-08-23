@@ -23,11 +23,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -38,11 +38,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +53,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -67,7 +68,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -117,6 +117,8 @@ fun DetailScreen(
     val scope = rememberCoroutineScope()
     var showBottomSheet = remember { mutableStateOf(false) }
     var actorId = remember { mutableIntStateOf(0) }
+
+    val isDialogVisible = remember { mutableStateOf(true) }
 
     Box(
         modifier =
@@ -506,6 +508,15 @@ fun DetailScreen(
                 }
             }
         }
+        if (errorMessage.isNotEmpty() && isDialogVisible.value) {
+            AlertDialogExample(
+                onDismissRequest = { },
+                onClose = { isDialogVisible.value = false },
+                dialogTitle = "Error",
+                dialogText = errorMessage,
+                icon = painterResource(id = R.drawable.error_24),
+            )
+        }
     }
 }
 
@@ -757,6 +768,50 @@ fun onFavClick(
         )
         showCustomToast(context, "Added to favorites")
     }
+}
+
+@Composable
+fun AlertDialogExample(
+    onDismissRequest: () -> Unit,
+    onClose: () -> Unit,
+    dialogTitle: String,
+    dialogText: String,
+    icon: Painter,
+) {
+    AlertDialog(
+        icon = {
+            Icon(icon, contentDescription = "Example Icon")
+        },
+        title = {
+            Text(
+                text = dialogTitle,
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontFamily = FontFamily(Font(R.font.ubuntu_bold)),
+            )
+        },
+        text = {
+            Text(
+                text = dialogText,
+                color = Color.Black,
+                fontSize = 16.sp,
+                fontFamily = FontFamily(Font(R.font.ubuntu_light)),
+                textAlign = TextAlign.Center,
+            )
+        },
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onClose()
+                },
+            ) {
+                Text("Close")
+            }
+        },
+    )
 }
 
 fun showCustomToast(
