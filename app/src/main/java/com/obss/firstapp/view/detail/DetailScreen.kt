@@ -287,15 +287,17 @@ fun DetailScreen(
 
                                 Spacer(modifier = Modifier.width(4.dp))
 
-                                Text(
-                                    text = movie?.voteAverage?.roundToSingleDecimal().toString(),
-                                    style =
-                                        TextStyle(
-                                            color = Color.White,
-                                            fontSize = dimensionResource(id = R.dimen.movie_info_text_size).value.sp,
-                                            fontFamily = FontFamily(Font(R.font.ubuntu_bold)),
-                                        ),
-                                )
+                                if (movie != null) {
+                                    Text(
+                                        text = movie.voteAverage?.roundToSingleDecimal().toString(),
+                                        style =
+                                            TextStyle(
+                                                color = Color.White,
+                                                fontSize = dimensionResource(id = R.dimen.movie_info_text_size).value.sp,
+                                                fontFamily = FontFamily(Font(R.font.ubuntu_bold)),
+                                            ),
+                                    )
+                                }
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                             Row(
@@ -314,15 +316,17 @@ fun DetailScreen(
 
                                 Spacer(modifier = Modifier.width(4.dp))
 
-                                Text(
-                                    text = movie?.runtime?.toInt().toString(),
-                                    style =
-                                        TextStyle(
-                                            color = Color.White,
-                                            fontSize = dimensionResource(id = R.dimen.movie_info_text_size).value.sp,
-                                            fontFamily = FontFamily(Font(R.font.ubuntu_bold)),
-                                        ),
-                                )
+                                if (movie != null) {
+                                    Text(
+                                        text = movie.runtime.toInt().toString(),
+                                        style =
+                                            TextStyle(
+                                                color = Color.White,
+                                                fontSize = dimensionResource(id = R.dimen.movie_info_text_size).value.sp,
+                                                fontFamily = FontFamily(Font(R.font.ubuntu_bold)),
+                                            ),
+                                    )
+                                }
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                             movie?.releaseDate?.take(4)?.let {
@@ -388,27 +392,28 @@ fun DetailScreen(
                     }
                 }
 
-                Text(
-                    text = stringResource(id = R.string.summary),
-                    style =
-                        TextStyle(
-                            color = Color.LightGray,
-                            fontSize = dimensionResource(id = R.dimen.movie_detail_title).value.sp,
-                            fontFamily = FontFamily(Font(R.font.ubuntu_bold)),
-                        ),
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 6.dp),
-                )
-
-                Text(
-                    text = movie?.overview ?: "",
-                    style =
-                        TextStyle(
-                            color = Color.White,
-                            fontSize = dimensionResource(id = R.dimen.movie_detail_text_size).value.sp,
-                            fontFamily = FontFamily(Font(R.font.ubuntu_light)),
-                        ),
-                    modifier = Modifier.padding(horizontal = 24.dp).padding(bottom = 6.dp),
-                )
+                if (movie != null) {
+                    Text(
+                        text = stringResource(id = R.string.summary),
+                        style =
+                            TextStyle(
+                                color = Color.LightGray,
+                                fontSize = dimensionResource(id = R.dimen.movie_detail_title).value.sp,
+                                fontFamily = FontFamily(Font(R.font.ubuntu_bold)),
+                            ),
+                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 6.dp),
+                    )
+                    Text(
+                        text = movie.overview ?: "",
+                        style =
+                            TextStyle(
+                                color = Color.White,
+                                fontSize = dimensionResource(id = R.dimen.movie_detail_text_size).value.sp,
+                                fontFamily = FontFamily(Font(R.font.ubuntu_light)),
+                            ),
+                        modifier = Modifier.padding(horizontal = 24.dp).padding(bottom = 6.dp),
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
