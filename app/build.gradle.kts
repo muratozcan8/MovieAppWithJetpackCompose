@@ -107,5 +107,11 @@ dependencies {
     implementation("androidx.paging:paging-common-ktx:$paging_version")
     implementation("androidx.paging:paging-compose:$paging_version")
 
+    // swipe refresh
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+
+    // test
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.androidx.core.testing)
 }
