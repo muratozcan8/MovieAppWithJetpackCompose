@@ -45,6 +45,7 @@ android {
 }
 
 dependencies {
+    testImplementation(libs.junit.jupiter)
     val nav_version = "2.7.7"
     val room_version = "2.6.1"
     val retrofit_version = "2.11.0"
