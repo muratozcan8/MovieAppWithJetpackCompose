@@ -4,6 +4,7 @@ import android.text.Spanned
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.core.text.HtmlCompat
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -13,12 +14,16 @@ fun String.formatToReadableDate(): String {
     val inputFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
     inputFormatter.timeZone = TimeZone.getTimeZone("UTC")
 
-    val birthDate = inputFormatter.parse(this)
-
     val outputFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH)
-    val formattedDate = birthDate?.let { outputFormatter.format(it) }
+    outputFormatter.timeZone = TimeZone.getDefault()
 
-    return "$formattedDate"
+    return try {
+        val birthDate = inputFormatter.parse(this)
+        val formattedDate = birthDate?.let { outputFormatter.format(it) }
+        formattedDate ?: ""
+    } catch (e: ParseException) {
+        ""
+    }
 }
 
 fun String.formatAndCalculateAge(): String {
