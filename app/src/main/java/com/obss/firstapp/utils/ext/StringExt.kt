@@ -15,7 +15,7 @@ fun String.formatToReadableDate(): String {
     inputFormatter.timeZone = TimeZone.getTimeZone("UTC")
 
     val outputFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH)
-    outputFormatter.timeZone = TimeZone.getDefault()
+    outputFormatter.timeZone = TimeZone.getTimeZone("UTC") // Set output time zone to UTC
 
     return try {
         val birthDate = inputFormatter.parse(this)
