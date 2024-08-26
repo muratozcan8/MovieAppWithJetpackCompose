@@ -7,6 +7,7 @@ import androidx.core.text.HtmlCompat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -28,22 +29,24 @@ fun String.formatToReadableDate(): String {
 
 fun String.formatAndCalculateAge(): String {
     val inputFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val birthDate = inputFormatter.parse(this)
+    return try {
+        val birthDate = inputFormatter.parse(this)
 
-    val outputFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH)
-    val formattedDate = birthDate?.let { outputFormatter.format(it) }
+        val outputFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH)
+        val formattedDate = birthDate?.let { outputFormatter.format(it) } ?: ""
 
-    val birthCalendar = Calendar.getInstance()
-    if (birthDate != null) {
-        birthCalendar.time = birthDate
+        val birthCalendar = Calendar.getInstance().apply { time = birthDate ?: Date() }
+        val today = Calendar.getInstance()
+        var age = today.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR)
+
+        if (today.get(Calendar.DAY_OF_YEAR) < birthCalendar.get(Calendar.DAY_OF_YEAR)) {
+            age--
+        }
+
+        "$formattedDate ($age)"
+    } catch (e: Exception) {
+        ""
     }
-    val today = Calendar.getInstance()
-    var age = today.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR)
-
-    if (today.get(Calendar.DAY_OF_YEAR) < birthCalendar.get(Calendar.DAY_OF_YEAR)) {
-        age--
-    }
-    return "$formattedDate ($age)"
 }
 
 fun String.toAnnotatedString(): AnnotatedString {

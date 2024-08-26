@@ -1,10 +1,11 @@
-package com.obss.firstapp.utils.ext
+package com.obss.firstapp.utils.ext.string
 
+import com.obss.firstapp.utils.ext.formatToReadableDate
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.*
 import java.util.TimeZone
 
-class StringExtKtTest {
+class ReadableDateKtTest {
     @Test
     fun `formatToReadableDate formats valid date correctly`() {
         val dateStr = "2024-08-21T15:45:00.000Z"
