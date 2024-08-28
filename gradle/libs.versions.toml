@@ -24,7 +24,6 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 androidx-material3 = { module = "androidx.compose.material3:material3" }
 androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
@@ -39,9 +38,6 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
-mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
-mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

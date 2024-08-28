@@ -45,7 +45,6 @@ android {
 }
 
 dependencies {
-    testImplementation(libs.junit.jupiter)
     val nav_version = "2.7.7"
     val room_version = "2.6.1"
     val retrofit_version = "2.11.0"
@@ -70,6 +69,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
 
     implementation("androidx.compose.foundation:foundation:1.6.8")
     implementation("androidx.compose.material3:material3:1.2.1")
@@ -109,9 +111,4 @@ dependencies {
 
     // swipe refresh
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
-
-    // test
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.inline)
-    testImplementation(libs.androidx.core.testing)
 }
