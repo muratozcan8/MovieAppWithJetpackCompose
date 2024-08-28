@@ -109,7 +109,7 @@ fun SearchScreen(
         AlertDialogExample(
             onDismissRequest = { },
             onClose = { isDialogVisible.value = false },
-            dialogTitle = "Error",
+            dialogTitle = ERROR,
             dialogText = errorMessage,
             icon = painterResource(id = R.drawable.error_24),
         )
@@ -131,15 +131,15 @@ fun SearchBar(
             Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-        placeholder = { Text(text = "Search...", color = Color.White) },
+        placeholder = { Text(text = SEARCH, color = Color.White) },
         singleLine = true,
         leadingIcon = {
-            Icon(imageVector = Icons.Default.Search, contentDescription = "Search Icon", tint = Color.White)
+            Icon(imageVector = Icons.Default.Search, contentDescription = SEARCH_ICON_DESC, tint = Color.White)
         },
         trailingIcon = {
             if (query.isNotEmpty()) {
                 IconButton(onClick = { onQueryChanged("") }) {
-                    Icon(imageVector = Icons.Default.Close, contentDescription = "Clear Icon", tint = Color.White)
+                    Icon(imageVector = Icons.Default.Close, contentDescription = CLEAR_ICON_DESC, tint = Color.White)
                 }
             }
         },
@@ -227,7 +227,7 @@ fun MovieGridItem(
         Column(modifier = Modifier.fillMaxHeight()) {
             AsyncImage(
                 model = "$IMAGE_BASE_URL${movie.posterPath}",
-                contentDescription = "Movie Image",
+                contentDescription = MOVIE_IMAGE_DESC,
                 modifier = imageModifier,
                 contentScale = ContentScale.Fit,
             )
@@ -272,7 +272,7 @@ fun MovieGridItem(
                 Icon(
                     modifier = Modifier.padding(end = dimensionResource(id = R.dimen.movie_grid_item_icon_margin_bottom)),
                     painter = painterResource(id = if (movie.isFavorite) R.drawable.favorite_24 else R.drawable.favorite_border_24),
-                    contentDescription = "Favorite Icon",
+                    contentDescription = FAVORITE_ICON_DESC,
                     tint = Color.White,
                 )
             }
@@ -290,7 +290,7 @@ fun AlertDialogError(
 ) {
     AlertDialog(
         icon = {
-            Icon(icon, contentDescription = "Example Icon")
+            Icon(icon, contentDescription = EXAMPLE_ICON_DESC)
         },
         title = {
             Text(
@@ -318,8 +318,17 @@ fun AlertDialogError(
                     onClose()
                 },
             ) {
-                Text("Close")
+                Text(CLOSE)
             }
         },
     )
 }
+
+private const val ERROR = "Error"
+private const val CLOSE = "Close"
+private const val SEARCH = "Search..."
+private const val SEARCH_ICON_DESC = "Search Icon"
+private const val CLEAR_ICON_DESC = "Clear Icon"
+private const val MOVIE_IMAGE_DESC = "Movie Image"
+private const val FAVORITE_ICON_DESC = "Favorite Icon"
+private const val EXAMPLE_ICON_DESC = "Example Icon"
