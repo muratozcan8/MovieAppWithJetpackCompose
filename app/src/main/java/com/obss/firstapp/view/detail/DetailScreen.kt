@@ -197,7 +197,7 @@ fun DetailScreen(
                         Spacer(modifier = Modifier.weight(1f))
                         if (videos.isNotEmpty()) {
                             for (video in videos) {
-                                if (video.site == "YouTube" && video.type == "Trailer" && video.official == true) {
+                                if (video.site == YOUTUBE && video.type == TRAILER && video.official == true) {
                                     IconButton(onClick = {
                                         val intentApp = Intent(Intent.ACTION_VIEW, Uri.parse("$YOUTUBE_APP${video.key}"))
                                         val intentBrowser = Intent(Intent.ACTION_VIEW, Uri.parse("$YOUTUBE_BASE_URL${video.key}"))
@@ -226,7 +226,7 @@ fun DetailScreen(
                             }
                         }
                         if (movie != null) {
-                            val isFavorite = remember { mutableStateOf(movie.isFavorite ?: false) }
+                            val isFavorite = remember { mutableStateOf(movie.isFavorite) }
 
                             IconButton(onClick = {
                                 onFavClick(movieId, movie, detailViewModel, context)
@@ -255,7 +255,7 @@ fun DetailScreen(
                                 .align(Alignment.BottomStart),
                     ) {
                         Text(
-                            text = movie?.title ?: "",
+                            text = movie?.title ?: TEMP,
                             style =
                                 TextStyle(
                                     color = Color.White,
@@ -404,7 +404,7 @@ fun DetailScreen(
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 6.dp),
                     )
                     Text(
-                        text = movie.overview ?: "",
+                        text = movie.overview ?: TEMP,
                         style =
                             TextStyle(
                                 color = Color.White,
@@ -440,7 +440,7 @@ fun DetailScreen(
                     )
 
                     Text(
-                        text = movieCasts.take(3).joinToString(", ") { it.name.toString() },
+                        text = movieCasts.take(3).joinToString(SEPARATOR) { it.name.toString() },
                         style =
                             TextStyle(
                                 color = Color.White,
@@ -460,7 +460,7 @@ fun DetailScreen(
                         items(movieCasts.take(3)) { actor ->
                             AsyncImage(
                                 model = "${IMAGE_BASE_URL}${actor.profilePath}",
-                                contentDescription = "Actor Image",
+                                contentDescription = ACTOR_IMAGE_DESC,
                                 modifier =
                                     Modifier
                                         .size(84.dp)
@@ -517,7 +517,7 @@ fun DetailScreen(
             AlertDialogExample(
                 onDismissRequest = { },
                 onClose = { isDialogVisible.value = false },
-                dialogTitle = "Error",
+                dialogTitle = ERROR,
                 dialogText = errorMessage,
                 icon = painterResource(id = R.drawable.error_24),
             )
@@ -765,13 +765,13 @@ fun onFavClick(
                 }
             }
         }
-        showCustomToast(context, "Removed from favorites")
+        showCustomToast(context, REMOVED_MESSAGE)
     } else {
         movie?.isFavorite = true
         viewModel.addFavoriteMovie(
             favoriteMovie = FavoriteMovie(0, movieId, movie?.title.toString(), movie?.posterPath.toString(), movie?.voteAverage),
         )
-        showCustomToast(context, "Added to favorites")
+        showCustomToast(context, ADDED_MESSAGE)
     }
 }
 
@@ -785,7 +785,7 @@ fun AlertDialogExample(
 ) {
     AlertDialog(
         icon = {
-            Icon(icon, contentDescription = "Example Icon")
+            Icon(icon, contentDescription = EXAMPLE_ICON_DESC)
         },
         title = {
             Text(
@@ -813,7 +813,7 @@ fun AlertDialogExample(
                     onClose()
                 },
             ) {
-                Text("Close")
+                Text(CLOSE)
             }
         },
     )
@@ -825,3 +825,14 @@ fun showCustomToast(
 ) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
+
+private const val YOUTUBE = "YouTube"
+private const val TRAILER = "Trailer"
+private const val SEPARATOR = ", "
+private const val ACTOR_IMAGE_DESC = "Actor Image"
+private const val ERROR = "Error"
+private const val TEMP = ""
+private const val REMOVED_MESSAGE = "Removed from favorites"
+private const val ADDED_MESSAGE = "Added to favorites"
+private const val EXAMPLE_ICON_DESC = "Example Icon"
+private const val CLOSE = "Close"

@@ -17,6 +17,7 @@ constraintlayout = "2.1.4"
 junitJupiter = "5.8.1"
 mockitoCore = "5.2.0"
 mockitoInline = "5.2.0"
+junitJupiterVersion = "5.8.1"
 
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
@@ -38,6 +39,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
