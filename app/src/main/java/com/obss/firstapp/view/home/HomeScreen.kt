@@ -60,6 +60,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.obss.firstapp.R
 import com.obss.firstapp.data.model.movie.Movie
 import com.obss.firstapp.utils.Constants.IMAGE_BASE_URL
@@ -187,67 +189,77 @@ fun DisplayMovies(
     isGridLayoutSelected: Boolean,
 ) {
     if (isGridLayoutSelected) {
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(120.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            contentPadding = PaddingValues(8.dp),
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = movies.loadState.refresh is LoadState.Loading),
+            onRefresh = { movies.refresh() },
         ) {
-            items(movies.itemCount) { index ->
-                movies[index]?.let { movie ->
-                    MovieGridItem(movie = movie, navController = navController)
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(120.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                contentPadding = PaddingValues(8.dp),
+            ) {
+                items(movies.itemCount) { index ->
+                    movies[index]?.let { movie ->
+                        MovieGridItem(movie = movie, navController = navController)
+                    }
                 }
-            }
 
-            when {
-                movies.loadState.refresh is LoadState.Loading -> {
-                    item {
-                        CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
+                when {
+                    movies.loadState.refresh is LoadState.Loading -> {
+                        item {
+                            CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
+                        }
                     }
-                }
-                movies.loadState.append is LoadState.Loading -> {
-                    item {
-                        CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    movies.loadState.append is LoadState.Loading -> {
+                        item {
+                            CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
+                        }
                     }
-                }
-                errorMessage.isNotEmpty() -> {
-                    item {
-                        Text(
-                            "Error: $errorMessage",
-                            modifier = Modifier.fillMaxWidth(),
-                        )
+                    errorMessage.isNotEmpty() -> {
+                        item {
+                            Text(
+                                "Error: $errorMessage",
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
                     }
                 }
             }
         }
     } else {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            contentPadding = PaddingValues(8.dp),
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = movies.loadState.refresh is LoadState.Loading),
+            onRefresh = { movies.refresh() },
         ) {
-            items(movies.itemCount) { index ->
-                movies[index]?.let { movie ->
-                    MovieLinearItem(movie = movie, navController = navController)
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                contentPadding = PaddingValues(8.dp),
+            ) {
+                items(movies.itemCount) { index ->
+                    movies[index]?.let { movie ->
+                        MovieLinearItem(movie = movie, navController = navController)
+                    }
                 }
-            }
 
-            when {
-                movies.loadState.refresh is LoadState.Loading -> {
-                    item {
-                        CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
+                when {
+                    movies.loadState.refresh is LoadState.Loading -> {
+                        item {
+                            CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
+                        }
                     }
-                }
-                movies.loadState.append is LoadState.Loading -> {
-                    item {
-                        CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    movies.loadState.append is LoadState.Loading -> {
+                        item {
+                            CircularProgressIndicator(modifier = Modifier.fillMaxWidth())
+                        }
                     }
-                }
-                errorMessage.isNotEmpty() -> {
-                    item {
-                        Text(
-                            "Error: $errorMessage",
-                            modifier = Modifier.fillMaxWidth(),
-                        )
+                    errorMessage.isNotEmpty() -> {
+                        item {
+                            Text(
+                                "Error: $errorMessage",
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
                     }
                 }
             }
@@ -288,7 +300,7 @@ fun MovieGridItem(
         Column(modifier = Modifier.fillMaxHeight()) {
             AsyncImage(
                 model = "${IMAGE_BASE_URL}${movie.posterPath}",
-                contentDescription = "Movie Image",
+                contentDescription = MOVIE_IMAGE_DESC,
                 modifier = imageModifier,
                 contentScale = ContentScale.Fit,
             )
@@ -316,7 +328,7 @@ fun MovieGridItem(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.star_24),
-                    contentDescription = "Movie Score",
+                    contentDescription = MOVIE_SCORE_DESC,
                     modifier =
                         Modifier
                             .padding(start = dimensionResource(id = R.dimen.movie_grid_item_icon_margin_bottom)),
@@ -333,7 +345,7 @@ fun MovieGridItem(
                 Icon(
                     modifier = Modifier.padding(end = dimensionResource(id = R.dimen.movie_grid_item_icon_margin_bottom)),
                     painter = painterResource(id = if (movie.isFavorite) R.drawable.favorite_24 else R.drawable.favorite_border_24),
-                    contentDescription = "Favorite Icon",
+                    contentDescription = FAVORITE_ICON_DESC,
                     tint = Color.White,
                 )
             }
@@ -355,7 +367,7 @@ fun MovieLinearItem(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(dimensionResource(id = R.dimen.movie_linear_item_height) + 20.dp)
+                .height(dimensionResource(id = R.dimen.movie_linear_item_height) + MOVIE_ITEM_EXTRA)
                 .padding(
                     horizontal = 3.dp,
                     vertical = dimensionResource(id = R.dimen.movie_grid_item_margin_bottom),
@@ -469,20 +481,21 @@ fun SegmentedButton(
                     Modifier
                         .weight(1f)
                         .padding(4.dp),
-                shape = RoundedCornerShape(50),
+                shape = RoundedCornerShape(TYPE_BUTTON_CORNER_RADIUS),
             ) {
-                Text(text = option, fontSize = 14.sp, overflow = TextOverflow.Ellipsis, maxLines = 1)
+                Text(text = option, fontSize = 14.sp, overflow = TextOverflow.Ellipsis, maxLines = MIN_LINE)
             }
         }
     }
-}
-
-@Composable
-fun TopBar() {
-    var isGridView by remember { mutableStateOf(true) }
 }
 
 private var isGridLayout = true
 private const val POPULAR = "Popular"
 private const val TOP_RATED = "Top Rated"
 private const val NOW_PLAYING = "Now Playing"
+private const val MOVIE_SCORE_DESC = "Movie Score"
+private const val FAVORITE_ICON_DESC = "Favorite Icon"
+private const val MOVIE_IMAGE_DESC = "Movie Image"
+private const val TYPE_BUTTON_CORNER_RADIUS = 50
+private const val MIN_LINE = 1
+private const val MOVIE_ITEM_EXTRA = 20.dp

@@ -112,4 +112,5 @@ dependencies {
 
     // swipe refresh
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.24.13-rc")
 }
