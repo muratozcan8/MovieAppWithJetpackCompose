@@ -498,4 +498,4 @@ private const val FAVORITE_ICON_DESC = "Favorite Icon"
 private const val MOVIE_IMAGE_DESC = "Movie Image"
 private const val TYPE_BUTTON_CORNER_RADIUS = 50
 private const val MIN_LINE = 1
-private const val MOVIE_ITEM_EXTRA = 20.dp
+private val MOVIE_ITEM_EXTRA = 20.dp
