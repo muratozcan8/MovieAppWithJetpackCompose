@@ -27,7 +27,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -38,7 +37,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -53,7 +51,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -78,6 +75,7 @@ import com.obss.firstapp.data.local.FavoriteMovie
 import com.obss.firstapp.data.model.actor.Actor
 import com.obss.firstapp.data.model.movie.Movie
 import com.obss.firstapp.data.model.movieDetail.MovieDetail
+import com.obss.firstapp.utils.AlertDialogError
 import com.obss.firstapp.utils.Constants.IMAGE_BASE_URL
 import com.obss.firstapp.utils.Constants.YOUTUBE_APP
 import com.obss.firstapp.utils.Constants.YOUTUBE_BASE_URL
@@ -514,7 +512,7 @@ fun DetailScreen(
             }
         }
         if (errorMessage.isNotEmpty() && isDialogVisible.value) {
-            AlertDialogExample(
+            AlertDialogError(
                 onDismissRequest = { },
                 onClose = { isDialogVisible.value = false },
                 dialogTitle = ERROR,
@@ -775,50 +773,6 @@ fun onFavClick(
     }
 }
 
-@Composable
-fun AlertDialogExample(
-    onDismissRequest: () -> Unit,
-    onClose: () -> Unit,
-    dialogTitle: String,
-    dialogText: String,
-    icon: Painter,
-) {
-    AlertDialog(
-        icon = {
-            Icon(icon, contentDescription = EXAMPLE_ICON_DESC)
-        },
-        title = {
-            Text(
-                text = dialogTitle,
-                color = Color.Black,
-                fontSize = 20.sp,
-                fontFamily = FontFamily(Font(R.font.ubuntu_bold)),
-            )
-        },
-        text = {
-            Text(
-                text = dialogText,
-                color = Color.Black,
-                fontSize = 16.sp,
-                fontFamily = FontFamily(Font(R.font.ubuntu_light)),
-                textAlign = TextAlign.Center,
-            )
-        },
-        onDismissRequest = {
-            onDismissRequest()
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onClose()
-                },
-            ) {
-                Text(CLOSE)
-            }
-        },
-    )
-}
-
 fun showCustomToast(
     context: Context,
     message: String,
@@ -835,7 +789,6 @@ private const val ERROR = "Error"
 private const val TEMP = ""
 private const val REMOVED_MESSAGE = "Removed from favorites"
 private const val ADDED_MESSAGE = "Added to favorites"
-private const val EXAMPLE_ICON_DESC = "Example Icon"
 private const val CLOSE = "Close"
 
 private fun getReviews(reviewsSize: Int): String = "Reviews ($reviewsSize)"

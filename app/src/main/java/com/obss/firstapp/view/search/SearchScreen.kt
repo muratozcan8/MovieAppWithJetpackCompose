@@ -67,7 +67,6 @@ import com.obss.firstapp.R
 import com.obss.firstapp.data.model.movieSearch.MovieSearch
 import com.obss.firstapp.utils.Constants.IMAGE_BASE_URL
 import com.obss.firstapp.utils.ext.roundToSingleDecimal
-import com.obss.firstapp.view.detail.AlertDialogExample
 
 @Composable
 fun SearchScreen(
@@ -106,7 +105,7 @@ fun SearchScreen(
         }
     }
     if (errorMessage.isNotEmpty() && isDialogVisible.value) {
-        AlertDialogExample(
+        AlertDialogError(
             onDismissRequest = { },
             onClose = { isDialogVisible.value = false },
             dialogTitle = ERROR,
