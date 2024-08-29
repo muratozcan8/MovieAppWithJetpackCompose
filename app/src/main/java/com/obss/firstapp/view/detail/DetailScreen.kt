@@ -423,7 +423,7 @@ fun DetailScreen(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                     ) {
-                        Text(text = "Reviews (${reviews.size})", color = Color.White, fontSize = 16.sp)
+                        Text(text = getReviews(reviews.size), color = Color.White, fontSize = 16.sp)
                     }
                 }
 
@@ -652,7 +652,7 @@ fun ActorDetailBottomSheet(
                     }
                 },
             ) {
-                Text("Close")
+                Text(CLOSE)
             }
         }
     }
@@ -692,7 +692,7 @@ fun MovieGridItem(
         Column(modifier = Modifier.fillMaxHeight()) {
             AsyncImage(
                 model = "${IMAGE_BASE_URL}${movie.posterPath}",
-                contentDescription = "Movie Image",
+                contentDescription = MOVIE_IMAGE_DESC,
                 modifier = imageModifier,
                 contentScale = ContentScale.Fit,
             )
@@ -830,9 +830,12 @@ private const val YOUTUBE = "YouTube"
 private const val TRAILER = "Trailer"
 private const val SEPARATOR = ", "
 private const val ACTOR_IMAGE_DESC = "Actor Image"
+private const val MOVIE_IMAGE_DESC = "Movie Image"
 private const val ERROR = "Error"
 private const val TEMP = ""
 private const val REMOVED_MESSAGE = "Removed from favorites"
 private const val ADDED_MESSAGE = "Added to favorites"
 private const val EXAMPLE_ICON_DESC = "Example Icon"
 private const val CLOSE = "Close"
+
+private fun getReviews(reviewsSize: Int): String = "Reviews ($reviewsSize)"
