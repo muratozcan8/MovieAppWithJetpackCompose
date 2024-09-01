@@ -25,7 +25,7 @@ MovieApp is an Android application that allows users to explore movies, view det
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/muratozcan8/MovieApp.git
+    git clone https://github.com/muratozcan8/MovieAppWithJetpackCompose.git
     ```
 
 2. **Open the project in Android Studio**:
